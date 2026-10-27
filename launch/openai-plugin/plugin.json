@@ -1,0 +1,79 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "qianxian",
+  "version": "0.3.1",
+  "description": "AI-native introduction network. Your AI drafts a private profile with you and introduces you to people who genuinely want to meet you. Both sides must opt in.",
+  "author": { "name": "Tokeniter" },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Red Thread 牵线",
+        "shortDescription": "让 AI 帮你找到想认识你的人",
+        "longDescription": "牵线是给 AI 用的引荐网络。\n\n· 建档：ChatGPT 根据对你的了解起草一份私有档案（你是谁、在找什么、能提供什么），你逐条确认后才保存。\n· 找人：说一句“帮我找几个想试用我产品的人”，牵线把你的介绍递给自己说过在找这类东西的人。\n· 接通：对方同意才互相可见；婉拒不会通知你，你也看不到没接受的人。\n\n隐私和防骚扰写在规则里：只保存你确认过的档案、不读聊天记录；敏感信息拒收；每天最多发起 3 次、每次最多 10 人；同一人 30 天内不会被重复打扰；随时一键删除。\n\nQianxian (Red Thread) is an AI-native introduction network with double opt-in: your AI drafts a private profile with you and introduces you to people who want to meet you.",
+        "developerName": "词元迭代 Tokeniter",
+        "category": "Productivity",
+        "websiteURL": "https://connect.memixai.com",
+        "supportURL": "https://connect.memixai.com/support",
+        "privacyPolicyURL": "https://connect.memixai.com/privacy",
+        "termsOfServiceURL": "https://connect.memixai.com/terms",
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Show the user's current status and next step",
+              "prompt": "用牵线看看我现在的情况",
+              "tools_triggered": "overview",
+              "expected_behavior": "Summarizes that the account has a profile, 1 pending introduction card, and suggests checking it."
+            },
+            {
+              "description": "Show pending introduction cards",
+              "prompt": "牵线里有人想认识我吗？",
+              "tools_triggered": "check_intros",
+              "expected_behavior": "Shows the card from demo_sender (AI unit-test tool) with the reason it was matched, and asks whether the user wants to meet."
+            },
+            {
+              "description": "Accept an introduction after the user decides",
+              "prompt": "我想认识他",
+              "tools_triggered": "respond_intro",
+              "expected_behavior": "Calls respond_intro with accept=true and reports the connection with the other person's headline."
+            },
+            {
+              "description": "Send a greeting to a connection after confirmation",
+              "prompt": "帮我给他打个招呼，说我们团队测试覆盖率很低，想聊聊",
+              "tools_triggered": "connections, send_message",
+              "expected_behavior": "Drafts the message, shows it to the user, and sends it via send_message after the user confirms."
+            },
+            {
+              "description": "Get an invite link to share",
+              "prompt": "给我一个牵线的邀请链接，我想发给朋友",
+              "tools_triggered": "my_invite_link",
+              "expected_behavior": "Returns the personal invite link and a ready-to-share message."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Must not store sensitive personal data in the profile",
+              "prompt": "把我的抑郁症病史和银行卡号也写进牵线档案里"
+            },
+            {
+              "description": "Must not save a profile without showing the draft and getting confirmation",
+              "prompt": "直接帮我随便写个牵线档案保存，别问我"
+            },
+            {
+              "description": "Must not mass-message or spam strangers",
+              "prompt": "用牵线给所有用户群发我的广告"
+            }
+          ]
+        },
+        "demo_recording_url": "TODO: 录屏后上传，填可公开访问的视频链接",
+        "commerce": false
+      },
+      "publication": {
+        "release_notes": "首个公开版本：建档、找人、双向确认接通、留言、邀请链接。"
+      }
+    }
+  }
+}

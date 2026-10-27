@@ -1,0 +1,18 @@
+[Unit]
+Description=qianxian AI intro network (MCP + OAuth)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/qianxian
+# 支持邮箱：显示在官网页脚、支持页、隐私政策和使用条款
+Environment=QIANXIAN_CONTACT=2270882555@qq.com
+# PUBLIC_URL 必须是用户和 ChatGPT / Claude 实际访问的 https 地址，OAuth 元数据依赖它
+ExecStart=/opt/qianxian/.venv/bin/python run.py --host 127.0.0.1 --port 8400 --public-url https://connect.memixai.com --db /opt/qianxian/data/qianxian.db
+Restart=always
+RestartSec=1
+TimeoutStopSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target
